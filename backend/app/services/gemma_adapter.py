@@ -353,11 +353,14 @@ class GemmaCopilotAdapter:
         }
 
         try:
-            async with httpx.AsyncClient(timeout=10.0) as client:
+            async with httpx.AsyncClient(timeout=25.0) as client:
                 res = await client.post(endpoint_url, json=payload, headers=headers)
                 if res.status_code == 200:
                     data = res.json()
                     answer = data["choices"][0]["message"]["content"]
+                    # Clean internal reasoning tags if present
+                    if "</thought>" in answer:
+                        answer = answer.split("</thought>", 1)[-1].strip()
                     return {
                         "response_markdown": answer,
                         "is_ai_generated": True,

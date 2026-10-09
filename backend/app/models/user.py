@@ -1,4 +1,5 @@
 import uuid
+from typing import Optional
 from datetime import datetime, timezone
 from sqlalchemy import Column, String, DateTime, Boolean
 from sqlalchemy.orm import relationship
@@ -24,3 +25,7 @@ class User(Base):
 
     patient = relationship("Patient", back_populates="user", uselist=False)
     audit_logs = relationship("AuditLog", back_populates="user")
+
+    @property
+    def patient_id(self) -> Optional[str]:
+        return self.patient.id if self.patient else None

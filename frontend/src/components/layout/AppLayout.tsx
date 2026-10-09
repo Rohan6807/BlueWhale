@@ -16,8 +16,10 @@ export const AppLayout: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const location = useLocation();
 
+  const isAuthPage = ['/login', '/signup', '/forgot-password'].includes(location.pathname);
+
   const fetchActiveEmergency = async () => {
-    if (!activePatientId) return;
+    if (!user || !activePatientId) return;
     try {
       const event = await api.getActiveEmergency(activePatientId);
       setActiveEmergency(event);
@@ -31,10 +33,11 @@ export const AppLayout: React.FC = () => {
   };
 
   useEffect(() => {
+    if (!user) return;
     fetchActiveEmergency();
     const interval = setInterval(fetchActiveEmergency, 8000);
     return () => clearInterval(interval);
-  }, [activePatientId]);
+  }, [activePatientId, user]);
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
@@ -42,11 +45,13 @@ export const AppLayout: React.FC = () => {
       <Header
         onOpenCopilot={() => setCopilotOpen(true)}
         onOpenEmergencyModal={() => setModalOpen(true)}
-        emergencyActive={Boolean(activeEmergency && activeEmergency.status === 'prompted')}
+        emergencyActive={Boolean(user && activeEmergency && activeEmergency.status === 'prompted')}
       />
 
       <div className="flex-1 flex overflow-hidden">
-        <Sidebar emergencyActive={Boolean(activeEmergency && activeEmergency.status === 'prompted')} />
+        {!isAuthPage && (
+          <Sidebar emergencyActive={Boolean(user && activeEmergency && activeEmergency.status === 'prompted')} />
+        )}
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
           <Outlet />
         </main>

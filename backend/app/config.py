@@ -34,9 +34,9 @@ class Settings(BaseSettings):
         return ["*"]
 
     # AI Configuration (Gemma 4 Adapter)
-    GEMMA_API_BASE_URL: str = os.getenv("GEMMA_API_BASE_URL", "")
+    GEMMA_API_BASE_URL: str = os.getenv("GEMMA_API_BASE_URL", "https://generativelanguage.googleapis.com/v1beta/openai")
     GEMMA_API_KEY: str = os.getenv("GEMMA_API_KEY", "")
-    GEMMA_MODEL_NAME: str = os.getenv("GEMMA_MODEL_NAME", "google/gemma-4-9b-it")
+    GEMMA_MODEL_NAME: str = os.getenv("GEMMA_MODEL_NAME", "gemma-4-26b-a4b-it")
     GEMMA_TEMPERATURE: float = 0.2
     
     # Simulation & Safety

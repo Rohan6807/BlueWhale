@@ -35,14 +35,14 @@ services:
         value: "*"
       - key: GEMMA_API_BASE_URL
         scope: RUN_TIME
-        value: ""
+        value: "https://generativelanguage.googleapis.com/v1beta/openai"
       - key: GEMMA_API_KEY
         scope: RUN_TIME
         type: SECRET
-        value: ""
+        value: "REPLACE_ME_IN_DIGITALOCEAN_DASHBOARD"
       - key: GEMMA_MODEL_NAME
         scope: RUN_TIME
-        value: "google/gemma-4-9b-it"
+        value: "gemma-4-26b-a4b-it"
 
 static_sites:
   - name: frontend

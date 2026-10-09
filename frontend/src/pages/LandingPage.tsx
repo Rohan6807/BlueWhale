@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import {
   Heart,
   Activity,
@@ -14,13 +14,15 @@ import {
   FileText,
   Lock,
   ChevronRight,
+  LogIn,
+  UserPlus,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { PrototypeDisclaimer } from '../components/common/PrototypeDisclaimer';
 
 export const LandingPage: React.FC = () => {
   const navigate = useNavigate();
-  const { switchPersona } = useAuth();
+  const { user, switchPersona } = useAuth();
 
   const handleLaunchPersona = async (persona: string, route: string) => {
     await switchPersona(persona);
@@ -50,29 +52,34 @@ export const LandingPage: React.FC = () => {
           <PrototypeDisclaimer />
         </div>
 
-        {/* Quick Launch Buttons */}
+        {/* Core Auth & Navigation Buttons */}
         <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-          <button
-            onClick={() => handleLaunchPersona('patient', '/patient')}
-            className="px-6 py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm flex items-center gap-2 shadow-sm transition-all"
-          >
-            <span>Explore Patient Dashboard</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => handleLaunchPersona('clinician', '/hospital')}
-            className="px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm flex items-center gap-2 shadow-sm transition-all"
-          >
-            <Building2 className="w-4 h-4 text-teal-400" />
-            <span>Clinician Hospital Portal</span>
-          </button>
-          <button
-            onClick={() => handleLaunchPersona('caregiver', '/caregiver')}
-            className="px-6 py-3 rounded-xl bg-white hover:bg-slate-100 text-slate-800 border border-slate-300 font-bold text-sm flex items-center gap-2 shadow-xs transition-all"
-          >
-            <Users className="w-4 h-4 text-rose-500" />
-            <span>Caregiver Response Portal</span>
-          </button>
+          {user ? (
+            <Link
+              to={user.role === 'clinician' ? '/hospital' : user.role === 'caregiver' ? '/caregiver' : '/patient'}
+              className="px-6 py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm flex items-center gap-2 shadow-sm transition-all"
+            >
+              <span>Go to My Dashboard ({user.full_name})</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          ) : (
+            <>
+              <Link
+                to="/login"
+                className="px-6 py-3 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm flex items-center gap-2 shadow-sm transition-all"
+              >
+                <LogIn className="w-4 h-4" />
+                <span>Log In</span>
+              </Link>
+              <Link
+                to="/signup"
+                className="px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm flex items-center gap-2 shadow-sm transition-all"
+              >
+                <UserPlus className="w-4 h-4 text-teal-400" />
+                <span>Sign Up (Create Account)</span>
+              </Link>
+            </>
+          )}
         </div>
       </div>
 

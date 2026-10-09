@@ -7,6 +7,7 @@ export interface User {
   role: UserRole;
   is_active: boolean;
   created_at: string;
+  patient_id?: string;
 }
 
 export interface AuthToken {

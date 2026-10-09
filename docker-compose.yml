@@ -32,9 +32,9 @@ services:
       DATABASE_URL: postgresql://cardiolens_user:cardiolens_secure_password_2026@db:5432/cardiolens_db
       SECRET_KEY: cardiolens-prod-jwt-secret-key-replace-in-do-3984279
       DEMO_MODE: "true"
-      GEMMA_API_BASE_URL: ""
-      GEMMA_API_KEY: ""
-      GEMMA_MODEL_NAME: "google/gemma-4-9b-it"
+      GEMMA_API_BASE_URL: "${GEMMA_API_BASE_URL:-https://generativelanguage.googleapis.com/v1beta/openai}"
+      GEMMA_API_KEY: "${GEMMA_API_KEY}"
+      GEMMA_MODEL_NAME: "${GEMMA_MODEL_NAME:-gemma-4-26b-a4b-it}"
     ports:
       - "8000:8000"
 

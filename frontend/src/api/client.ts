@@ -53,6 +53,45 @@ export const api = {
     return handleResponse<AuthToken>(res);
   },
 
+  async signup(fullName: string, email: string, password: string): Promise<User> {
+    const res = await fetch(`${API_BASE}/auth/signup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ full_name: fullName, email, password }),
+    });
+    return handleResponse<User>(res);
+  },
+
+  async forgotPassword(email: string): Promise<{ message: string; demo_hint?: string; reset_token?: string }> {
+    const res = await fetch(`${API_BASE}/auth/forgot-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+    return handleResponse(res);
+  },
+
+  async resetPassword(email: string, newPassword: string): Promise<{ message: string }> {
+    const res = await fetch(`${API_BASE}/auth/reset-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, new_password: newPassword }),
+    });
+    return handleResponse(res);
+  },
+
+  async logout(): Promise<{ message: string }> {
+    try {
+      const res = await fetch(`${API_BASE}/auth/logout`, {
+        method: 'POST',
+        headers: getAuthHeader(),
+      });
+      return handleResponse(res);
+    } catch {
+      return { message: 'Logged out' };
+    }
+  },
+
   async switchDemoPersona(persona: string): Promise<AuthToken> {
     const res = await fetch(`${API_BASE}/auth/demo-switch`, {
       method: 'POST',

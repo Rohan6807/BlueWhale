@@ -22,14 +22,9 @@ def get_current_user(
     token: Optional[str] = Depends(oauth2_scheme),
 ) -> User:
     if not token:
-        # Default fallback to demo patient if unauthenticated in DEMO_MODE
-        if settings.DEMO_MODE:
-            demo_user = db.query(User).filter(User.email == "patient@cardiolens.demo").first()
-            if demo_user:
-                return demo_user
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Authentication credentials were not provided",
+            detail="Authentication required. Please log in.",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
